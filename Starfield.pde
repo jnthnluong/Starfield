@@ -46,7 +46,7 @@ class Particle
   Particle() {
     float r = 1 *sqrt((float)(Math.random())) +1;
 
-    mySpeed = (Math.random()*80+0.01);
+    mySpeed = (Math.random()*20+0.01);
     myAngle = (Math.random()*2*PI);
     myX = width/2+r*cos((float)myAngle);
     myY = height/2+r*sin((float)myAngle);
