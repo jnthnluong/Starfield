@@ -1,40 +1,41 @@
 //your code here
-Particle [] Stars1 = new Particle[5000];
-
+Particle [] Stars1 = new Particle[1000000];
+int usedStars = 10;
 void setup()
 {
   noStroke();
   size(800, 800);
-  Stars1[Stars1.length-1] = new OddBallParticle();
-  for (int i = 0; i < Stars1.length-1; i++) {
-    Stars1[i] = new Particle();
+
+  for (int i = 0; i < usedStars; i++) {
+    Stars1[i] = new Particle(); // slightly faster than stars2
   }
 
   //your code here
 }
-double landSize = 100;
+int cycles = 0;
 // width/2, height/2, (Math.random()*0.6+0.02), (Math.random()*2*PI)
 void draw()
 {
-  //your code here
-  background(190, 217, 222);
-  fill(110, 196, 93);
-  ellipse(400, 400, (float)landSize,(float)landSize);
   noStroke();
-  for (int i = 0; i < Stars1.length; i ++) {
+  int addStars = (int)(Math.random()*3+1);
+  //your code here
+  background(53, 60, 62);
+  for (int i = 0; i < usedStars; i ++) {
+    noStroke();
     Stars1[i].move();
     Stars1[i].show();
 
-    if (dist((float)Stars1[i].myX, (float)Stars1[i].myY, width/2, height/2) > 900) {
+    Stars1[i].mySpeed += 0.2;
+  }
 
-        landSize+=0.00001;
-
-      
+  for (int i = usedStars; i < usedStars+addStars; i++) {
+    if ((int)(Math.random()*1000) == 1) {
+      Stars1[i] = new OddBallParticle();
+    } else {
+      Stars1[i] = new Particle();
     }
   }
-  if(landSize >800){
-    noLoop();
-  }
+  usedStars+=addStars;
 }
 class Particle
 {
@@ -44,9 +45,9 @@ class Particle
 
 
   Particle() {
-    float r = 1 *sqrt((float)(Math.random())) +1;
+    float r = 40*sqrt((float)(Math.random())) +30; // first number is radius from center of where dots can spawn, second number is how far each dot MUST be from center
 
-    mySpeed = (Math.random()*20+0.01);
+    mySpeed = 0.1;
     myAngle = (Math.random()*2*PI);
     myX = width/2+r*cos((float)myAngle);
     myY = height/2+r*sin((float)myAngle);
@@ -62,45 +63,70 @@ class Particle
   }
   void show() {
     fill(255);
+    /*if ((int)(Math.random()*100) < 50) {
+     ellipse((float)myX, (float)myY, 5, 20);
+     } else {
+     ellipse((float)myX, (float)myY, 20, 5);
+     }*/
     ellipse((float)myX, (float)myY, 20, 20);
+  }
 
-    //fill(myColor);
-  }
-  void reset() {
-    float r = 50 *sqrt((float)(Math.random()));
-    myColor = color((int)(Math.random()*256), (int)(Math.random()*256), (int)(Math.random()*256));
-    myX = width/2+r*cos((float)myAngle);
-    myY = height/2+r*sin((float)myAngle);
-  }
 }
 
 class OddBallParticle extends Particle //inherits from Particle
 {
   //your code here
-
+  int random =(int)(Math.random()*100);
   OddBallParticle() {
-    mySpeed = 10;
-    myX = width/2;
-    myY = height/2;
-    myColor = color((int)(Math.random()*256), (int)(Math.random()*256), (int)(Math.random()*256));
-  }
-  void move() {
-    myX += (Math.random()*mySpeed-mySpeed/2);
-    myY += (Math.random()*mySpeed-mySpeed/2);
-  }
+    mySpeed = (int)(Math.random()*40+20);
+    mySize = (int)(Math.random()*50-25);
+
+    if (random <25) {
+      myX = 0;
+      myY = 0;
+    } else if (random > 25 && random < 50) {
+      myX = width;
+      myY= 0;
+    } else if (random > 50 && random < 75) {
+      myX = width;
+      myY = height;
+    } else {
+      myX = 0;
+      myY = height;
+    }
+    myX = myX + (int)(Math.random()*500-250);
+    myY = myY + (int)(Math.random()*500-250);
+
+
+
+    myColor = color(147, 117, 117);
+  } 
+
   void show() {
     //rect((float)myX-50, (float)myY-50, 50, 50);
-    fill(0);
+
     stroke(0);
-    line(375-391+(float)myX, 444-396+(float)myY, 391-391+(float)myX, 428-396+(float)myY);
-    line(391-391+(float)myX, 428-396+(float)myY, 403-391+(float)myX, 444-396+(float)myY);
-    line(391-391+(float)myX, 428-396+(float)myY, 391-391+(float)myX, 381-396+(float)myY);
-    line(391-391+(float)myX, 396-396+(float)myY, 371-391+(float)myX, 395-396+(float)myY);
-    line(371-391+(float)myX, 396-396+(float)myY, 379-391+(float)myX, 384-396+(float)myY);
-    line(391-391+(float)myX, 396-396+(float)myY, 411-391+(float)myX, 391-396+(float)myY);
-    line(411-391+(float)myX, 391-396+(float)myY, 403-391+(float)myX, 383-396+(float)myY);
-    line((float)myX, (float)myY, 400, 400);
-    fill(myColor);
-    ellipse(391-391+(float)myX, 372-396+(float)myY, 20, 20);
+    strokeWeight(5);
+    fill(234, 176, 47);
+    ellipse((float)myX, (float)myY, 65+(float)mySize, 65+(float)mySize);
+
+    fill(196, 187, 168);
+    ellipse((float)myX, (float)myY, 50+(float)mySize, 50+(float)mySize);
+    ellipse((float)myX+(int)(Math.random()*40-20), (float)myY+(int)(Math.random()*40-20), (float)mySize+50, (float)(mySize)+50);
+  }
+  void move() {
+    if (random <25) {
+      myX = myX + mySpeed;
+      myY = myY + mySpeed;
+    } else if (random > 25 && random < 50) {
+      myX = myX - mySpeed;
+      myY= myY + mySpeed;
+    } else if (random > 50 && random < 75) {
+      myX = myX - mySpeed;
+      myY = myY - mySpeed;
+    } else {
+      myX = myX + mySpeed;
+      myY = myY - mySpeed;
+    }
   }
 }
