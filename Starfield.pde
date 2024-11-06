@@ -29,7 +29,7 @@ void draw()
   }
 
   for (int i = usedStars; i < usedStars+addStars; i++) {
-    if ((int)(Math.random()*1000) == 1) {
+    if ((int)(Math.random()*1000) < 4) {
       Stars1[i] = new OddBallParticle();
     } else {
       Stars1[i] = new Particle();
